@@ -21,33 +21,52 @@ $("#new-form").submit(event => {
   };
   console.log(newInfo);
 
-  $.post("/api/newauthor", newInfo, data => {
-    newInfo.authorId = data.insertId;
-    console.log(newInfo);
-    $.post("/api/newbook", newInfo, data => {
-      console.log(data);
-      newInfo.bookId = data.insertId;
-      $.post("/api/newbook_rating", newInfo, data => {
-        console.log(data);
+  // step 0: check to see if author exists
+  $.post("/api/author", newInfo, function(data) {
+    if (data.length === 0) {
+      $.post("/api/newauthor", newInfo, data => {
+        newInfo.authorId = data.insertId;
+        console.log(newInfo);
+        $.post("/api/newbook", newInfo, data => {
+          console.log(data);
+          newInfo.bookId = data.insertId;
+          $.post("/api/newbook_rating", newInfo, data => {
+            console.log(data);
+          });
+          $.post("/api/newbook_progress", newInfo, data => {
+            console.log(data);
+          });
+        });
       });
-      $.post("/api/newbook_progress", newInfo, data => {
+    } else {
+      newInfo.authorId = data[0].id;
+      $.post("/api/newbook", newInfo, data => {
         console.log(data);
+        newInfo.bookId = data.insertId;
+        $.post("/api/newbook_rating", newInfo, data => {
+          console.log(data);
+        });
+        $.post("/api/newbook_progress", newInfo, data => {
+          console.log(data);
+        });
       });
-    });
+    }
   });
-  // $.post("/api/onebook", updateInfo, data => {
-  //   console.log("hi");
-  //   console.log(data);
-  //   if (data.changedRows >= 1) {
-  //     $("#update-title").val("");
-  //     $("#update-author").val("");
-  //     $("#update-status").val("to read");
-  //     $("#update-rating").val("5");
-  //     $("#update-review").val("");
-  //     $("#update-pages").val(100);
-  //     $("#update-pages-read").val(0);
-  //     window.location.reload();
-  //   }
+  //
+
+  // $.post("/api/newauthor", newInfo, data => {
+  //   newInfo.authorId = data.insertId;
+  //   console.log(newInfo);
+  //   $.post("/api/newbook", newInfo, data => {
+  //     console.log(data);
+  //     newInfo.bookId = data.insertId;
+  //     $.post("/api/newbook_rating", newInfo, data => {
+  //       console.log(data);
+  //     });
+  //     $.post("/api/newbook_progress", newInfo, data => {
+  //       console.log(data);
+  //     });
+  //   });
   // });
 });
 
