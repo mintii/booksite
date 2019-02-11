@@ -1,18 +1,25 @@
 var connection = require("./connection.js");
 
 module.exports = function(app) {
+  /**
+   * Selects a single author from the existing author database. This is called as part of generating a new
+   * book - if an author already exists in the database, use that authorID instead of creating a new author.
+   */
   app.post("/api/author", function(req, res) {
     console.log(req.body);
     connection.query(
       `SELECT * FROM authors WHERE UPPER(name) = "${req.body.name}";`,
       function(err, data) {
         if (err) throw err;
-        // console.log(data);
         res.json(data);
       }
     );
   });
 
+  /**
+   * Query to select ALL BOOKS that exist. Used in the /books page to generate the full list of books and
+   * cards for each book.
+   */
   app.get("/api/allbooks", function(req, res) {
     connection.query(
       "SELECT * FROM books LEFT JOIN progress ON books.id = progress.bookID LEFT JOIN ratings ON books.id = ratings.bookID LEFT JOIN authors ON books.authorID = authors.ID;",
@@ -24,6 +31,9 @@ module.exports = function(app) {
     );
   });
 
+  /**
+   * Query to select a single book for the book details page
+   */
   app.get("/api/onebook/:id", function(req, res) {
     console.log(req.params);
     connection.query(
@@ -38,6 +48,10 @@ module.exports = function(app) {
     );
   });
 
+  /**
+   * Query used in the book update form. This updates whatever exists in the current table with
+   * user-input information.
+   */
   app.post("/api/onebook", function(req, res) {
     console.log("req body", req.body);
 
@@ -61,13 +75,15 @@ module.exports = function(app) {
     );
   });
 
+  //////////////////////////////////////////////////////////////////////////////////////////////////////////////////
+  // NEW ITEMS /////////////////////////////////////////////////////////////////////////////////////////////////////
+  //////////////////////////////////////////////////////////////////////////////////////////////////////////////////
+
   /**
-   * The New Item area --
-   * author will return authorID, then book -> bookID, then the review and etc can be done
+   * New Author added to database. This will return the new ID of the created row.
    */
   app.post("/api/newauthor", function(req, res) {
     console.log(req.body);
-    // insertId - gets sent back!!!
     connection.query(
       `INSERT INTO authors (name,keywords) VALUES ("${req.body.name}","");`,
       function(err, data) {
@@ -77,9 +93,12 @@ module.exports = function(app) {
     );
   });
 
+  /**
+   * New book added to database. This will return the new ID of the created book, which gets fed into
+   * other create item queries.
+   */
   app.post("/api/newbook", function(req, res) {
     console.log(req.body);
-    // insertId - gets sent back!!!
     connection.query(
       `INSERT INTO books (title,authorID) VALUES("${req.body.title}",${
         req.body.authorId
@@ -91,9 +110,11 @@ module.exports = function(app) {
     );
   });
 
+  /**
+   * Creates a new ratings entry for the book in question
+   */
   app.post("/api/newbook_rating", function(req, res) {
     console.log(req.body);
-    // insertId - gets sent back!!!
     connection.query(
       `INSERT INTO ratings (rating,review,bookId) VALUES (${req.body.rating},"${
         req.body.review
@@ -105,9 +126,11 @@ module.exports = function(app) {
     );
   });
 
+  /**
+   * Creates a new progress entry for the book in question
+   */
   app.post("/api/newbook_progress", function(req, res) {
     console.log(req.body);
-    // insertId - gets sent back!!!
     connection.query(
       `INSERT INTO progress (pages,bookstatus,pagesRead,bookId) VALUES (${
         req.body.pages
@@ -119,11 +142,3 @@ module.exports = function(app) {
     );
   });
 };
-
-//  INSERT INTO progress (pages,bookstatus,pagesRead,bookId) VALUES (${
-//    req.body.pages
-//  },"${req.body.bookstatus}",${req.body.pagesRead},3);
-//  INSERT INTO ratings (rating,review,bookId) VALUES (${req.body.rating},"${
-//   req.body.review
-// }",${req.body.bookId})
-//  `,

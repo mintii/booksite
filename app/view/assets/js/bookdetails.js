@@ -1,6 +1,7 @@
+/**
+ * Create the bookID - this determines everything about the actual book being pulled in/edited.
+ */
 const bookID = window.location.pathname.substring(13);
-
-let authorID;
 
 /**
  * On page load, query the databases and fill in all information
@@ -10,20 +11,15 @@ $(document).ready(() => {
   console.log(bookID);
 
   $.get(`/api/onebook/${bookID}`, data => {
-    // console.log(data);
-    console.log(data[0]);
-    authorID = data[0].authorID;
     enterBookDetails(data[0]);
   });
 });
 
 /**
- * Gets the information entered in the update form and
- * creates the object sent into the database
+ * This grabs information put into the update form
  */
-$("#update-form").submit(event => {
-  event.preventDefault();
-  const updateInfo = {
+const getFormInfo = () => {
+  return {
     title: $("#update-title")
       .val()
       .trim(),
@@ -39,26 +35,43 @@ $("#update-form").submit(event => {
     pages: $("#update-pages").val(),
     id: bookID
   };
+};
+
+/**
+ * This sets the fields in the input form to blanks or placeholders
+ */
+const setPlaceholders = () => {
+  $("#update-title").val("");
+  $("#update-author").val("");
+  $("#update-status").val("to read");
+  $("#update-rating").val("5");
+  $("#update-review").val("");
+  $("#update-pages").val(100);
+  $("#update-pages-read").val(0);
+  window.location.reload();
+};
+
+/**
+ * Gets the information entered in the update form and
+ * creates the object sent into the database
+ */
+$("#update-form").submit(event => {
+  event.preventDefault();
+  const updateInfo = getFormInfo();
+
   console.log(updateInfo);
   $.post("/api/onebook", updateInfo, data => {
     console.log("hi");
     console.log(data);
     if (data.changedRows >= 1) {
-      $("#update-title").val("");
-      $("#update-author").val("");
-      $("#update-status").val("to read");
-      $("#update-rating").val("5");
-      $("#update-review").val("");
-      $("#update-pages").val(100);
-      $("#update-pages-read").val(0);
-      window.location.reload();
+      setPlaceholders();
     }
   });
 });
 
 /**
  * this function updates each of the appropriate areas
- * of the details page
+ * of the details page. Called as part of page load.
  * @param {object} book
  */
 const enterBookDetails = book => {

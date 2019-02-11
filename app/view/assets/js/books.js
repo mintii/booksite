@@ -13,25 +13,13 @@ $(document).ready(() => {
     console.log(data);
     data.map(item => {
       createNewCard(item);
-      // console.log(item);
     });
   });
 });
 
-const testItem = {
-  title: "Test Title",
-  name: "Test Author",
-  review:
-    "I liked this book. Text goes here. Notes go here. I like lots of things. Hello world.",
-  pages: 234,
-  pagesRead: 121,
-  dateUpdated: "2019/01/21",
-  rating: 4
-};
-
 /**
- *
- * @param {object} item
+ * This creates the HTML for each book card.
+ * @param {object} item - each item consists of data from the API call for a single book.
  */
 function createNewCard(item) {
   let newBookCard = $("<div>");
@@ -67,8 +55,6 @@ function createNewCard(item) {
   let newBookText = $("<div>");
   newBookText.addClass("bookcard-text");
   newBookText.html(`<p>${item.review}</p>`);
-
-  // console.log(moment(item.dateUpdated).format("YYYY MM DD"));
 
   // create footer info
   let newBookFooter = $("<div>");
