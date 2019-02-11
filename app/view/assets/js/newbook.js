@@ -1,3 +1,7 @@
+//////////////////////////////////////////////////////////////////////////////////////////
+// HELPER FUNCTIONS //////////////////////////////////////////////////////////////////////
+//////////////////////////////////////////////////////////////////////////////////////////
+
 /**
  * Create an object from information that is entered in the new book form. This
  * gets passed to the database via API calls.
@@ -37,6 +41,10 @@ const createBookInfo = newInfo => {
   });
 };
 
+//////////////////////////////////////////////////////////////////////////////////////////
+// PAGE LOGIC AND FORM CONTROL ///////////////////////////////////////////////////////////
+//////////////////////////////////////////////////////////////////////////////////////////
+
 /**
  * Gets the information entered in the update form and
  * creates the object sent into the database
@@ -63,12 +71,3 @@ $("#new-form").submit(event => {
     }
   });
 });
-
-// how to do this:
-
-// 4 different API calls to hit each of the 4 tables
-// when returning data, we get insertId sent back
-
-// 1. update the author table first. using the insertId sent back...
-// 2. update the book table, using the insertId from the author table. Using the new book insertId...
-// 3. update the ratings and the progress tables, hooking them to the book table via insertId
