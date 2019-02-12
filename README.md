@@ -31,14 +31,15 @@ The user (me) can enter and log new books. Information includes
 
 ## TDL
 
-- author dropdown - some data verification so you can apply books to an existing author?
 - login functionality/login specifics
+- nav
 
 done:
 
 - create/format cards
 - book submit
 - book update
+- some data verification so you can apply books to an existing author?
 
 ## Future plans:
 
