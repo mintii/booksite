@@ -24,3 +24,13 @@
     "mysql": "^2.16.0"
   }
 }
+/*
+Check out the following dependencies for managing your db creation and interactions
+sequelize
+sequelize-cli
+
+For when you want to start creating users
+express-session (manages sessions for your users. Like who is logged in, what can they do)
+express-validator (validate the input of what users put in forms. Keep your DB safe!)
+  https://express-validator.github.io/docs/
+*/

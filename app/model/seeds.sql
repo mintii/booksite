@@ -5,13 +5,13 @@ VALUES
 ("ruth ozeki",""),
 ("jeff vandermeer","");
 
- INSERT INTO books (title,authorID) 
+ INSERT INTO books (title,authorID)
 VALUES
 ("a tale for the time being",1),
 ("annihilation",2)
 ;
 
--- status options: 
+-- status options:
 -- to read / reading / finished / dnf
 
 INSERT INTO progress(pages,bookstatus,pagesRead,bookId)
@@ -28,3 +28,9 @@ VALUES
 
 
 select * from books;
+
+-- So I'd recommend this and the schema.sql file get added as a command in package.json in the scripts section.
+-- Model is typically the programming logic that relates to the interactions with your database.
+-- Authors table -> Author class
+-- Books table -> Book class
+-- All saved in model file. Make a separate file for these sql files called migrations
